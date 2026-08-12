@@ -1,0 +1,130 @@
+<%- include('../partials/header') %>
+
+<main class="transaction-form-page">
+
+    <section class="transaction-form-card">
+
+        <div class="transaction-form-heading">
+            <p class="welcome-text">FINANCIAL ACTIVITY</p>
+
+            <h1>Add Transaction</h1>
+
+            <p>
+                Record your income or expenses to keep your finances organized.
+            </p>
+        </div>
+
+
+        <form action="/transactions" method="POST" class="transaction-form">
+
+            <div class="form-group">
+
+                <label for="description">
+                    Description
+                </label>
+
+                <input
+                    type="text"
+                    id="description"
+                    name="description"
+                    placeholder="e.g. Monthly Salary"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="amount">
+                    Amount
+                </label>
+
+                <input
+                    type="number"
+                    id="amount"
+                    name="amount"
+                    step="0.01"
+                    min="0"
+                    placeholder="e.g. 250000"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="transaction_type">
+                    Transaction Type
+                </label>
+
+                <select
+                    id="transaction_type"
+                    name="transaction_type"
+                    required
+                >
+
+                    <option value="Income">
+                        Income
+                    </option>
+
+                    <option value="Expense">
+                        Expense
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="category_id">
+                    Category
+                </label>
+
+                <select
+                    id="category_id"
+                    name="category_id"
+                    required
+                >
+
+                    <% categories.forEach(category => { %>
+
+                        <option value="<%= category.category_id %>">
+                            <%= category.category_name %>
+                        </option>
+
+                    <% }) %>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <a
+                    href="/transactions"
+                    class="cancel-btn"
+                >
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="save-btn"
+                >
+                    Save Transaction
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+<%- include('../partials/footer') %>

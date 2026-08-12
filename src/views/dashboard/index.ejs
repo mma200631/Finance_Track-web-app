@@ -1,0 +1,200 @@
+<%- include('../partials/header') %>
+
+<main class="dashboard-page">
+
+    <section class="dashboard-heading">
+
+        <p class="welcome-text">YOUR FINANCIAL OVERVIEW</p>
+
+        <h1>Dashboard</h1>
+
+        <p>
+            Here's a quick look at your financial activity.
+        </p>
+
+    </section>
+
+
+    <!-- Summary Cards -->
+
+    <section class="dashboard-cards">
+
+        <div class="dashboard-card income-card">
+
+            <div class="dashboard-card-icon">
+                ↗
+            </div>
+
+            <div>
+                <h3>Total Income</h3>
+
+                <p>
+                    ₦<%= summary.totalIncome.toFixed(2) %>
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-card expense-card">
+
+            <div class="dashboard-card-icon">
+                ↘
+            </div>
+
+            <div>
+                <h3>Total Expenses</h3>
+
+                <p>
+                    ₦<%= summary.totalExpenses.toFixed(2) %>
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-card balance-card">
+
+            <div class="dashboard-card-icon">
+                ₦
+            </div>
+
+            <div>
+                <h3>Current Balance</h3>
+
+                <p>
+                    ₦<%= summary.balance.toFixed(2) %>
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Recent Transactions -->
+
+<section class="recent-transactions">
+
+    <div class="section-header">
+        <div>
+            <p class="welcome-text">LATEST ACTIVITY</p>
+            <h2>Recent Transactions</h2>
+        </div>
+
+        <a href="/transactions" class="view-all">
+            View All
+        </a>
+    </div>
+
+
+    <% if (recentTransaction.length > 0) { %>
+
+        <div class="recent-table">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <% recentTransaction.forEach(transaction => { %>
+
+                        <tr>
+
+                            <td>
+                                <strong>
+                                    <%= transaction.description %>
+                                </strong>
+                            </td>
+
+                            <td>
+                                <%= transaction.category_name %>
+                            </td>
+
+                            <td>
+                                <span class="<%= transaction.transaction_type === 'Income' ? 'income-label' : 'expense-label' %>">
+                                    <%= transaction.transaction_type %>
+                                </span>
+                            </td>
+
+                            <td>
+                                ₦<%= Number(transaction.amount).toFixed(2) %>
+                            </td>
+
+                            <td>
+                                <%= new Date(transaction.transaction_date).toLocaleDateString() %>
+                            </td>
+
+                        </tr>
+
+                    <% }) %>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    <% } else { %>
+
+        <div class="empty-transactions">
+
+            <p>You don't have any transactions yet.</p>
+
+            <a href="/transactions/new" class="btn">
+                Add Your First Transaction
+            </a>
+
+        </div>
+
+    <% } %>
+
+</section>
+
+
+    <!-- Quick Links -->
+
+    <section class="dashboard-actions">
+
+        <h2>Manage Your Finances</h2>
+
+        <div class="dashboard-action-grid">
+
+            <a href="/transactions/new" class="dashboard-action">
+
+                <span>+</span>
+
+                <div>
+                    <h3>Add Transaction</h3>
+                    <p>Record income or an expense.</p>
+                </div>
+
+            </a>
+
+
+            <a href="/transactions" class="dashboard-action">
+
+                <span>☷</span>
+
+                <div>
+                    <h3>View Transactions</h3>
+                    <p>Review all your financial activity.</p>
+                </div>
+
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,193 @@
+<%- include('./partials/header') %>
+
+<main class="home-page">
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+
+        <div class="hero-content">
+
+            <p class="welcome-text">WELCOME TO FINANCE TRACK</p>
+
+            <h1>Take Control of Your Money</h1>
+
+            <p class="hero-description">
+                Track your income, manage your expenses, and understand
+                where your money goes — all in one simple place.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="/transactions/new" class="btn">
+                    + Add Transaction
+                </a>
+
+                <a href="/transactions" class="btn secondary-btn">
+                    View Transactions
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="hero-image">
+            <img
+                src="/images/finance-illustration.png.png"
+                alt="Personal finance tracking illustration"
+            >
+        </div>
+
+    </section>
+
+
+    <!-- Financial Overview -->
+    <section class="summary-section">
+
+        <h2>Financial Overview</h2>
+
+        <div class="summary-cards">
+
+            <div class="summary-card">
+                <div class="card-icon income-icon">↗</div>
+
+                <div>
+                    <h3>Total Income</h3>
+                    <p>₦0.00</p>
+                </div>
+            </div>
+
+
+            <div class="summary-card">
+                <div class="card-icon expense-icon">↘</div>
+
+                <div>
+                    <h3>Total Expenses</h3>
+                    <p>₦0.00</p>
+                </div>
+            </div>
+
+
+            <div class="summary-card">
+                <div class="card-icon balance-icon">₦</div>
+
+                <div>
+                    <h3>Current Balance</h3>
+                    <p>₦0.00</p>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Quick Actions -->
+    <section class="quick-actions">
+
+        <h2>Quick Actions</h2>
+
+        <div class="action-grid">
+
+            <a href="/transactions/new" class="action-card">
+                <span class="action-icon">+</span>
+
+                <h3>Add Transaction</h3>
+
+                <p>
+                    Record a new income or expense.
+                </p>
+            </a>
+
+
+            <a href="/transactions" class="action-card">
+                <span class="action-icon">☷</span>
+
+                <h3>View Transactions</h3>
+
+                <p>
+                    See and manage all your transactions.
+                </p>
+            </a>
+
+
+            <a href="/dashboard" class="action-card">
+                <span class="action-icon">↗</span>
+
+                <h3>View Dashboard</h3>
+
+                <p>
+                    See your financial summary and insights.
+                </p>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- Features -->
+    <section class="features-section">
+
+        <h2>Everything You Need to Manage Your Money</h2>
+
+        <div class="features-grid">
+
+            <div class="feature">
+                <span>📊</span>
+
+                <h3>Track Spending</h3>
+
+                <p>
+                    Organize your expenses into categories and
+                    understand your spending habits.
+                </p>
+            </div>
+
+
+            <div class="feature">
+                <span>💰</span>
+
+                <h3>Monitor Income</h3>
+
+                <p>
+                    Keep a clear record of your income and watch
+                    your financial progress.
+                </p>
+            </div>
+
+
+            <div class="feature">
+                <span>🎯</span>
+
+                <h3>Reach Your Goals</h3>
+
+                <p>
+                    Stay organized and make smarter decisions
+                    with a clear picture of your finances.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Call To Action -->
+    <section class="home-cta">
+
+        <h2>Start Building Better Money Habits</h2>
+
+        <p>
+            Record your first transaction and begin taking
+            control of your finances today.
+        </p>
+
+        <a href="/transactions/new" class="btn">
+            Get Started
+        </a>
+
+    </section>
+
+</main>
+
+<%- include('./partials/footer') %>
