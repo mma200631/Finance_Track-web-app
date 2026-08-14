@@ -56,43 +56,92 @@ The Edit Transaction page allows users to modify an existing transaction. The ex
 
 ### Dashboard Page
 
-The Dashboard provides a financial summary based on the transactions stored in the database. It dynamically calculates and displays total income, total expenses, and the current balance.
+The Dashboard provides a financial summary based on the logged-in user's transactions. It dynamically calculates and displays:
 
-The balance is calculated by subtracting total expenses from total income. Because the dashboard retrieves the information from the database, its values change when transactions are added, edited, or deleted.
+Total income
+Total expenses
+Current balance
+Recent transactions
 
-### Navigation Between Pages
+The balance is calculated by subtracting total expenses from total income.
 
-The pages are connected through the navigation bar and links throughout the application. The Home page provides access to the Transactions and Dashboard pages. The Transactions page provides links to create, edit, and delete transactions, while the Dashboard provides quick links to add a transaction or view existing transactions.
+Because the dashboard retrieves information from the database, its values change when transactions are added, edited, or deleted.
 
-# Development Environment
+Navigation Between Pages
 
-Finance Track was developed using **Visual Studio Code** as the primary code editor and **Node.js** as the JavaScript runtime environment. The application was tested locally using the Node.js development server and accessed through a web browser.
+The navigation bar changes depending on whether a user is logged in.
+
+Unauthenticated users can access:
+
+Home
+Sign Up
+Log In
+
+Authenticated users can access:
+
+Home
+Transactions
+Dashboard
+Log Out
+
+Transaction pages are protected using authentication middleware, preventing users who are not logged in from accessing them.
+
+Authentication and Authorization
+
+Finance Track supports multiple user accounts.
+
+The application includes:
+
+User registration
+Secure password hashing with bcrypt
+User login
+Session-based authentication
+Logout functionality
+Protected transaction routes
+User-specific transaction ownership
+Flash messages for registration, login, logout, and authentication errors
+
+Each registered user receives a unique finance_id. Transactions are associated with this ID so the application can distinguish between transactions belonging to different users.
+
+Development Environment
+
+Finance Track was developed using Visual Studio Code as the primary code editor and Node.js as the JavaScript runtime environment. The application was tested locally using the Node.js development server and accessed through a web browser.
 
 The application was developed using the following technologies and libraries:
 
-* **JavaScript** — Server-side programming language
-* **Node.js** — JavaScript runtime
-* **Express.js** — Web application framework for handling routes and requests
-* **EJS** — Templating engine used to dynamically generate HTML pages
-* **PostgreSQL** — Relational database used to store transactions and categories
-* **node-postgres (`pg`)** — Library used to connect the Node.js application to PostgreSQL
-* **dotenv** — Used to load environment variables
-* **Nodemon** — Used during development to automatically restart the server when code changes
+JavaScript — Server-side programming language
+Node.js — JavaScript runtime
+Express.js — Web application framework for handling routes and requests
+EJS — Templating engine used to dynamically generate HTML pages
+PostgreSQL — Relational database used to store users, transactions, and categories
+node-postgres (pg) — Library used to connect the Node.js application to PostgreSQL
+bcrypt — Used to securely hash user passwords
+express-session — Used to manage authenticated user sessions
+dotenv — Used to load environment variables
+Nodemon — Used during development to automatically restart the server when code changes
+Deployment
 
-# Useful Websites
+Finance Track is deployed online using Render.
 
-* [Node.js Documentation](https://nodejs.org/docs/latest/api/)
-* [Express.js Documentation](https://expressjs.com/)
-* [EJS Documentation](https://ejs.co/)
-* [PostgreSQL Documentation](https://www.postgresql.org/docs/)
-* [node-postgres Documentation](https://node-postgres.com/)
-* [MDN Web Docs](https://developer.mozilla.org/)
+Live URL
 
-# Future Work
+https://finance-track-web-app.onrender.com
 
-* Add user authentication so that each user can have a private account and their own financial transactions.
-* Add charts and visual reports to help users understand their income and spending patterns.
-* Add filtering and searching options for transactions by date, category, or transaction type.
-* Add monthly and yearly financial summaries.
-* Improve the mobile experience and add additional responsive design features.
-* Deploy the application online so it can be accessed without running the development server locally.
+The deployed application uses environment variables for sensitive configuration such as the PostgreSQL database connection and session secret.
+
+Useful Websites
+Node.js Documentation
+Express.js Documentation
+EJS Documentation
+PostgreSQL Documentation
+node-postgres Documentation
+MDN Web Docs
+Future Work
+Add charts and visual reports to help users understand their income and spending patterns.
+Add filtering and searching options for transactions by date, category, or transaction type.
+Add monthly and yearly financial summaries.
+Add budget creation and spending-limit features.
+Add improved validation for transaction amounts and user input.
+Improve the mobile experience and responsive design.
+Add password reset functionality.
+Improve the dashboard with additional financial insights and visualizations.
