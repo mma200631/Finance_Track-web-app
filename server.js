@@ -6,7 +6,6 @@ import route from './src/route.js';
 import { testConnection } from './src/model/db.js';
 import session from "express-session";
 import flash from "./src/middleware/flash.js";
-
 const app = express();
 
 const PORT = process.env.PORT || 3000;
