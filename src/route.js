@@ -10,6 +10,7 @@ import {
 } from "./controller/transaction.js";
 
 import { showDashboard } from "./controller/dashboard.js";
+import { showFinanceRegistrationForm,processFinanceRegistration,showFinanceLoginForm, processFinanceLogin, logOutFinanceUser, requireLogin } from "./controller/financeAuth.js";
 
 const route = express.Router();
 
@@ -23,29 +24,35 @@ route.get("/", (req, res) => {
 
 
 // Show all transactions
-route.get("/transactions", showTransactions);
+route.get("/transactions", requireLogin, showTransactions);
 
 
 // Show the form for adding a transaction
-route.get("/transactions/new", showNewTransaction);
+route.get("/transactions/new",requireLogin, showNewTransaction);
 
 // Save a new transaction
-route.post("/transactions", createTransaction);
+route.post("/transactions",requireLogin, createTransaction);
 
 
 // Show the edit form for a transaction
-route.get("/transactions/:id/edit", showEditTransaction);
+route.get("/transactions/:id/edit",requireLogin, showEditTransaction);
 
 // Update an existing transaction
-route.post("/transactions/:id/edit", updateTransactionController);
+route.post("/transactions/:id/edit",requireLogin, updateTransactionController);
 
 
 // Delete a transaction
-route.post("/transactions/:id/delete", deleteTransactionController);
+route.post("/transactions/:id/delete",requireLogin, deleteTransactionController);
 
 
 // Show the dashboard
-route.get("/dashboard", showDashboard);
+route.get("/dashboard", requireLogin, showDashboard);
+
+route.get('/register', showFinanceRegistrationForm);
+route.post('/register', processFinanceRegistration);
+route.get('/login', showFinanceLoginForm);
+route.post('/login', processFinanceLogin);
+route.post('/logout', logOutFinanceUser);
 
 
 // Export the router

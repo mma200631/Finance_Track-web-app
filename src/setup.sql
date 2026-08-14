@@ -30,3 +30,18 @@ VALUES
 ('Monthly Salary', 250000.00, 'Income', CURRENT_DATE, 1),
 ('Bought Groceries', 15000.00, 'Expense', CURRENT_DATE, 2),
 ('Bus Fare', 3000.00, 'Expense', CURRENT_DATE, 3);
+
+CREATE TABLE finance_users (
+	finance_id SERIAL PRIMARY KEY,
+	name VARCHAR(150) NOT NULL,
+	email VARCHAR(100) NOT NULL,
+	password_hash VARCHAR(100) NOT NULL,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE finance_users
+ADD CONSTRAINT finance_users_email_unique UNIQUE (email);
+
+ALTER TABLE transactions
+ADD COLUMN finance_id INT
+REFERENCES finance_users (finance_id);

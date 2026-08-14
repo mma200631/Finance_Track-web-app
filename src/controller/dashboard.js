@@ -6,21 +6,29 @@ import {
 
 // Get the information needed to display the dashboard
 const showDashboard = async (req, res) => {
+    try {
+        // Get the logged-in user's finance ID from the session
+        const financeId = req.session.financeUser.finance_id;
 
-    // Get the total income, expenses and balance
-    const summary = await getDashboardSummary();
+        // Get this user's total income, expenses and balance
+        const summary = await getDashboardSummary(financeId);
 
-    // Get the five most recent transactions
-    const recentTransaction = await getRecentTransaction();
+        // Get this user's five most recent transactions
+        const recentTransaction = await getRecentTransaction(financeId);
 
-    const title = "Dashboard";
+        const title = "Dashboard";
 
-    // Send the data to the dashboard view
-    res.render("dashboard/index", {
-        title,
-        summary,
-        recentTransaction
-    });
+        // Send the data to the dashboard view
+        res.render("dashboard/index", {
+            title,
+            summary,
+            recentTransaction
+        });
+
+    } catch (error) {
+        console.error("Error loading dashboard:", error);
+        res.status(500).send("Unable to load dashboard.");
+    }
 };
 
 

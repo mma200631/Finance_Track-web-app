@@ -1,9 +1,9 @@
 import db from "./db.js";
 
-// Get all transactions and include the category name for each transaction
-const getAllTransactions = async () => {
+// Get all transactions belonging to the logged-in user
+const getAllTransactions = async (financeId) => {
     const query = `
-        SELECT
+        SELECT 
             t.transaction_id,
             t.description,
             t.amount,
@@ -12,17 +12,18 @@ const getAllTransactions = async () => {
             c.category_name
         FROM transactions t
         JOIN finance_categories c
-        ON t.category_id = c.category_id
+            ON t.category_id = c.category_id
+        WHERE t.finance_id = $1
         ORDER BY t.transaction_date DESC;
     `;
 
-    const result = await db.query(query);
+    const result = await db.query(query, [financeId]);
 
     return result.rows;
 };
 
 
-// Get all the categories from the database
+// Get all categories
 const getAllCategories = async () => {
     const query = `
         SELECT *
@@ -36,12 +37,13 @@ const getAllCategories = async () => {
 };
 
 
-// Add a new transaction to the database
+// Add a new transaction for the logged-in user
 const addTransaction = async (
     description,
     amount,
     transactionType,
-    categoryId
+    categoryId,
+    financeId
 ) => {
 
     const query = `
@@ -49,9 +51,10 @@ const addTransaction = async (
             description,
             amount,
             transaction_type,
-            category_id
+            category_id,
+            finance_id
         )
-        VALUES ($1, $2, $3, $4)
+        VALUES ($1, $2, $3, $4, $5)
         RETURNING *;
     `;
 
@@ -59,7 +62,8 @@ const addTransaction = async (
         description,
         amount,
         transactionType,
-        categoryId
+        categoryId,
+        financeId
     ];
 
     const result = await db.query(query, values);
@@ -68,28 +72,30 @@ const addTransaction = async (
 };
 
 
-// Find one transaction using its ID
-const getTransactionById = async (id) => {
+// Find one transaction belonging to the logged-in user
+const getTransactionById = async (id, financeId) => {
 
     const query = `
         SELECT *
         FROM transactions
-        WHERE transaction_id = $1;
+        WHERE transaction_id = $1
+        AND finance_id = $2;
     `;
 
-    const result = await db.query(query, [id]);
+    const result = await db.query(query, [id, financeId]);
 
     return result.rows[0];
 };
 
 
-// Update an existing transaction
+// Update a transaction belonging to the logged-in user
 const updateTransaction = async (
     id,
     description,
     amount,
     transactionType,
-    categoryId
+    categoryId,
+    financeId
 ) => {
 
     const query = `
@@ -100,6 +106,7 @@ const updateTransaction = async (
             transaction_type = $3,
             category_id = $4
         WHERE transaction_id = $5
+        AND finance_id = $6
         RETURNING *;
     `;
 
@@ -108,7 +115,8 @@ const updateTransaction = async (
         amount,
         transactionType,
         categoryId,
-        id
+        id,
+        financeId
     ];
 
     const result = await db.query(query, values);
@@ -117,24 +125,22 @@ const updateTransaction = async (
 };
 
 
-// Delete a transaction using its ID
-const deleteTransaction = async (id) => {
+// Delete a transaction belonging to the logged-in user
+const deleteTransaction = async (id, financeId) => {
 
     const query = `
         DELETE FROM transactions
         WHERE transaction_id = $1
+        AND finance_id = $2;
     `;
 
-    const queryParams = [id];
-
-    const result = await db.query(query, queryParams);
+    const result = await db.query(query, [id, financeId]);
 
     return result;
 };
 
-
-// Get the total income, total expenses and current balance for the dashboard
-const getDashboardSummary = async () => {
+// Get dashboard summary for the logged-in user
+const getDashboardSummary = async (financeId) => {
 
     const query = `
         SELECT
@@ -150,15 +156,15 @@ const getDashboardSummary = async () => {
                 ELSE 0
             END), 0) AS total_expenses
 
-        FROM transactions;
+        FROM transactions
+        WHERE finance_id = $1;
     `;
 
-    const result = await db.query(query);
+    const result = await db.query(query, [financeId]);
 
     const totalIncome = Number(result.rows[0].total_income);
     const totalExpenses = Number(result.rows[0].total_expenses);
 
-    // Calculate the balance by subtracting expenses from income
     const balance = totalIncome - totalExpenses;
 
     return {
@@ -169,8 +175,8 @@ const getDashboardSummary = async () => {
 };
 
 
-// Get the five most recent transactions for the dashboard
-const getRecentTransaction = async () => {
+// Get the five most recent transactions for the logged-in user
+const getRecentTransaction = async (financeId) => {
 
     const query = `
         SELECT
@@ -182,18 +188,18 @@ const getRecentTransaction = async () => {
             c.category_name
         FROM transactions t
         JOIN finance_categories c
-        ON t.category_id = c.category_id
+            ON t.category_id = c.category_id
+        WHERE t.finance_id = $1
         ORDER BY t.transaction_date DESC, t.transaction_id DESC
         LIMIT 5;
     `;
 
-    const result = await db.query(query);
+    const result = await db.query(query, [financeId]);
 
     return result.rows;
 };
 
 
-// Export all the functions so they can be used by the controllers
 export {
     getAllTransactions,
     getAllCategories,

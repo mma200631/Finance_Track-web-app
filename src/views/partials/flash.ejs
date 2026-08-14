@@ -1,0 +1,37 @@
+<% const messages = flash(); %>
+
+<% if (messages.success.length > 0) { %>
+    <% messages.success.forEach(message => { %>
+        <div class="flash success">
+            <span>✓</span>
+            <span><%= message %></span>
+        </div>
+    <% }) %>
+<% } %>
+
+<% if (messages.error.length > 0) { %>
+    <% messages.error.forEach(message => { %>
+        <div class="flash error">
+            <span>!</span>
+            <span><%= message %></span>
+        </div>
+    <% }) %>
+<% } %>
+
+<% if (messages.warning.length > 0) { %>
+    <% messages.warning.forEach(message => { %>
+        <div class="flash warning">
+            <span>⚠</span>
+            <span><%= message %></span>
+        </div>
+    <% }) %>
+<% } %>
+
+<% if (messages.info.length > 0) { %>
+    <% messages.info.forEach(message => { %>
+        <div class="flash info">
+            <span>ⓘ</span>
+            <span><%= message %></span>
+        </div>
+    <% }) %>
+<% } %>

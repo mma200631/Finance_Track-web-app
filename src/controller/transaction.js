@@ -8,10 +8,14 @@ import {
 } from "../model/transaction.js";
 
 
-// Show all transactions on the transactions page
+// Show all transactions for the logged-in user
 const showTransactions = async (req, res) => {
     try {
-        const transactions = await getAllTransactions();
+
+        const financeId = req.session.financeUser.finance_id;
+
+        const transactions = await getAllTransactions(financeId);
+
         const title = "Transactions";
 
         res.render("transactions/index", {
@@ -30,7 +34,6 @@ const showTransactions = async (req, res) => {
 const showNewTransaction = async (req, res) => {
     try {
 
-        // Get the categories so they can be shown in the form
         const categories = await getAllCategories();
 
         res.render("transactions/new", {
@@ -45,11 +48,12 @@ const showNewTransaction = async (req, res) => {
 };
 
 
-// Take the form data and create a new transaction
+// Create a transaction for the logged-in user
 const createTransaction = async (req, res) => {
     try {
 
-        // Get the information submitted from the form
+        const financeId = req.session.financeUser.finance_id;
+
         const {
             description,
             amount,
@@ -57,37 +61,43 @@ const createTransaction = async (req, res) => {
             category_id
         } = req.body;
 
-        // Send the form data to the model to save it in the database
         await addTransaction(
             description,
             amount,
             transaction_type,
-            category_id
+            category_id,
+            financeId
         );
 
-        // Go back to the transactions page after saving
+        req.flash("success", "Transaction added successfully.");
+
         res.redirect("/transactions");
 
     } catch (error) {
 
         console.error(error);
-        res.status(500).send("Unable to save transaction.");
 
+        req.flash("error", "Unable to save transaction.");
+
+        res.redirect("/transactions/new");
     }
 };
 
 
-// Show the edit form for a selected transaction
+// Show the edit form for a user's transaction
 const showEditTransaction = async (req, res) => {
     try {
 
-        // Get the transaction ID from the URL
+        const financeId = req.session.financeUser.finance_id;
         const id = req.params.id;
 
-        // Find the transaction that the user wants to edit
-        const transaction = await getTransactionById(id);
+        const transaction = await getTransactionById(id, financeId);
 
-        // Get the categories for the edit form
+        if (!transaction) {
+            req.flash("error", "Transaction not found.");
+            return res.redirect("/transactions");
+        }
+
         const categories = await getAllCategories();
 
         res.render("transactions/edit", {
@@ -100,19 +110,17 @@ const showEditTransaction = async (req, res) => {
 
         console.error(error);
         res.status(500).send("Unable to load transaction.");
-
     }
 };
 
 
-// Update the transaction after the edit form is submitted
+// Update a user's transaction
 const updateTransactionController = async (req, res) => {
     try {
 
-        // Get the transaction ID from the URL
+        const financeId = req.session.financeUser.finance_id;
         const id = req.params.id;
 
-        // Get the updated information from the form
         const {
             description,
             amount,
@@ -120,48 +128,55 @@ const updateTransactionController = async (req, res) => {
             category_id
         } = req.body;
 
-        // Send the updated information to the model
-        await updateTransaction(
+        const transaction = await updateTransaction(
             id,
             description,
             amount,
             transaction_type,
-            category_id
+            category_id,
+            financeId
         );
 
-        // Go back to the transactions page after updating
+        if (!transaction) {
+            req.flash("error", "Transaction not found.");
+            return res.redirect("/transactions");
+        }
+
+        req.flash("success", "Transaction updated successfully.");
+
         res.redirect("/transactions");
 
     } catch (error) {
 
         console.error(error);
-        res.status(500).send("Unable to update transaction.");
-
+        req.flash("error", "Unable to update transaction.");
+        res.redirect("/transactions");
     }
 };
 
 
-// Delete a transaction
+// Delete a user's transaction
 const deleteTransactionController = async (req, res) => {
     try {
 
-        // Get the transaction ID from the URL
+        const financeId = req.session.financeUser.finance_id;
         const id = req.params.id;
 
-        // Delete the transaction from the database
-        await deleteTransaction(id);
+        await deleteTransaction(id, financeId);
 
-        // Go back to the transactions page
+        req.flash("success", "Transaction deleted successfully.");
+
         res.redirect("/transactions");
 
     } catch (error) {
+
         console.error(error);
-        res.status(500).send("Unable to delete transaction.");
+        req.flash("error", "Unable to delete transaction.");
+        res.redirect("/transactions");
     }
 };
 
 
-// Export the controller functions so the routes can use them
 export {
     showTransactions,
     showNewTransaction,
